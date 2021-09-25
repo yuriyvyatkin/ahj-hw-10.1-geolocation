@@ -10,21 +10,27 @@ export default function enterHandler(event, chatInput, chatMessagesMaker, geoloc
 
     chatInput.setAttribute('disabled', '');
 
-    const timerId = setInterval(() => {
-      if (chatInput.dataset.geoResponse) {
-        const geoResponse = JSON.parse(chatInput.dataset.geoResponse);
+    chatInput.setAttribute('disabled', '');
 
-        if (geoResponse.success) {
-          chatMessagesMaker.addMessage(geoResponse);
-        } else {
-          modal.setContent(geoResponse);
-          modal.toggle();
+    const promise = new Promise((resolve) => {
+      setTimeout(() => {
+        if (chatInput.dataset.geoResponse) {
+          resolve();
         }
+      }, 100);
+    });
 
-        clearInterval(timerId);
+    promise.then(() => {
+      const geoResponse = JSON.parse(chatInput.dataset.geoResponse);
+
+      chatInput.removeAttribute('disabled');
+
+      if (geoResponse.success) {
+        chatMessagesMaker.addMessage(geoResponse);
+      } else {
+        modal.setContent(geoResponse);
+        modal.toggle();
       }
-    }, 200);
-
-    chatInput.removeAttribute('disabled');
+    });
   }
 }

@@ -84,3 +84,6 @@ typings/
 
 # JetBrains
 .idea/
+
+# VSCode
+.vscode/
